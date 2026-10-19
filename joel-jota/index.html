@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Joel Jota · Links</title>
+<meta name="theme-color" content="#0a0908">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Permanent+Marker&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<style>
+/* Tema escuro fixo. Um destaque só (vermelho), um estilo de botão, cinco tamanhos de texto. */
+:root{
+  --bg:#0a0908; --tile:#141210; --line:rgba(245,243,239,.1);
+  --text:#f5f3ef; --muted:#8f8a83; --red:#e0261f;
+  --sans:'Inter Tight',system-ui,sans-serif; --hand:'Permanent Marker',cursive;
+  --t-1:42px; --t-2:30px; --t-3:21px; --t-body:17px; --t-cap:13px;
+  --r:22px; --gut:22px; --sec:104px;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:var(--t-body);line-height:1.47;-webkit-font-smoothing:antialiased;min-height:100dvh;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+.ph,.ph-fill{line-height:1}
+
+.page{max-width:480px;margin:0 auto;background:var(--bg)}
+@media (min-width:700px){.page{margin:32px auto;border-radius:32px;overflow:hidden;box-shadow:0 0 0 1px var(--line)}}
+.sec{padding:var(--sec) var(--gut) 0}
+
+/* gradação única: todas as fotos com o mesmo tom quente e escuro */
+.grade{filter:saturate(.72) sepia(.16) contrast(1.06) brightness(.92)}
+
+.h1{font-size:var(--t-1);font-weight:600;line-height:1.05;letter-spacing:-.035em}
+.h2{font-size:var(--t-2);font-weight:600;line-height:1.1;letter-spacing:-.03em}
+.h3{font-size:var(--t-3);font-weight:600;line-height:1.2;letter-spacing:-.02em}
+.muted{color:var(--muted)}
+.cap{font-size:var(--t-cap);color:var(--muted)}
+.hand{font-family:var(--hand);color:var(--red);text-transform:uppercase;font-weight:400;line-height:1;display:inline-block;transform:rotate(-2.5deg)}
+
+/* um botão principal (pílula branca) e links secundários com seta */
+.pill{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:50px;padding:0 26px;border-radius:999px;background:var(--text);color:var(--bg);font-weight:600;font-size:16px;white-space:nowrap;transition:transform .25s var(--ease),opacity .2s}
+.pill:hover{opacity:.9}.pill:active{transform:scale(.97)}
+.more{display:inline-flex;align-items:center;gap:4px;color:var(--text);font-weight:500;font-size:16px;white-space:nowrap}
+.more i{font-size:14px;transition:transform .25s var(--ease)}
+.more:hover i{transform:translateX(3px)}
+.actions{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin-top:26px}
+
+/* HERO: foto + a ordem numa tela só */
+.hero{position:relative;min-height:min(100svh,760px);display:flex;flex-direction:column;justify-content:flex-end;padding:0 var(--gut) 40px;overflow:hidden}
+.hero .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;height:80%}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,9,8,.35) 0%,transparent 22%,transparent 38%,rgba(10,9,8,.82) 64%,var(--bg) 100%)}
+.hero .logo{position:absolute;top:22px;left:var(--gut);z-index:2;width:88px}
+.hero h1{position:relative;z-index:2;font:inherit}
+.lane{display:block;position:relative;padding:2px 0 8px;font-weight:600;line-height:.92;text-transform:uppercase;letter-spacing:-.045em}
+.lane::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;opacity:.5;
+  background:repeating-linear-gradient(90deg,var(--red) 0 12px,transparent 12px 16px,var(--text) 16px 28px,transparent 28px 32px);
+  transform-origin:left;transform:scaleX(0);transition:transform 1.2s var(--ease)}
+.lane.in::after,.s1 .lane::after{transform:scaleX(1)}
+.lane:nth-child(1){font-size:clamp(60px,18vw,78px)}
+.lane:nth-child(2){font-size:clamp(46px,13.6vw,60px);color:rgba(245,243,239,.82);margin-top:6px}
+.lane:nth-child(3){font-size:clamp(35px,10.4vw,46px);color:rgba(245,243,239,.64);margin-top:6px}
+.lane:nth-child(2)::after{transition-delay:.15s}.lane:nth-child(3)::after{transition-delay:.3s}
+.drawing .lane::after{transition:transform .8s cubic-bezier(.65,0,.35,1) var(--d,0ms)}
+.hero .hand{position:relative;z-index:2;font-size:clamp(22px,7vw,28px);margin-top:20px;white-space:nowrap}
+
+/* EPISÓDIO: a thumb é a mensagem */
+.ep .thumb{position:relative;display:block;border-radius:var(--r);overflow:hidden;aspect-ratio:16/9;background:var(--tile);margin-top:18px}
+.ep .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.ep .thumb:hover img{transform:scale(1.025)}
+.ep .play{position:absolute;right:14px;bottom:14px;width:46px;height:46px;border-radius:50%;background:rgba(245,243,239,.92);color:var(--bg);display:grid;place-items:center;font-size:18px}
+
+/* PALESTRAS */
+.talk .photo{border-radius:var(--r);overflow:hidden;margin-top:28px;aspect-ratio:4/3}
+.talk .photo img{width:100%;height:100%;object-fit:cover;object-position:30% 30%}
+.figs{display:grid;grid-template-columns:repeat(3,auto);justify-content:space-between;margin-top:28px}
+.figs b{display:block;font-size:var(--t-2);font-weight:600;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.figs div>span{display:block;margin-top:6px}
+
+/* MENTORIA */
+.liga .stat{margin-top:22px}
+.liga .stat b{font-size:var(--t-1);font-weight:600;letter-spacing:-.045em;line-height:1}
+.liga .stat .cap{margin-top:8px;max-width:30ch}
+.liga .photo{border-radius:var(--r);overflow:hidden;margin-top:28px;aspect-ratio:16/10}
+.liga .photo img{width:100%;height:100%;object-fit:cover;object-position:50% 30%}
+
+/* GRADE FINAL: tiles estilo central de controle */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{background:var(--tile);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;justify-content:space-between;min-height:168px;transition:transform .3s var(--ease)}
+a.tile:active{transform:scale(.98)}
+.tile.wide{grid-column:span 2;min-height:0}
+.tile .cap{margin-bottom:6px}
+.tile .big{font-size:var(--t-2);font-weight:600;letter-spacing:-.04em;line-height:1}
+.tile .more{margin-top:14px;font-size:15px}
+.tile i.ic{font-size:26px;color:var(--muted)}
+.hard-top{display:flex;justify-content:space-between;align-items:baseline}
+.track{position:relative;height:26px;margin:18px 0 6px}
+.track .rope{position:absolute;left:0;right:0;top:50%;height:2px;margin-top:-1px;background:repeating-linear-gradient(90deg,var(--line) 0 10px,transparent 10px 14px)}
+.track .done{position:absolute;left:0;right:0;top:50%;height:2px;margin-top:-1px;background:var(--red);transform-origin:left;transform:scaleX(0);transition:transform 1.6s var(--ease)}
+.track .swim{position:absolute;top:0;left:0;width:26px;height:26px;margin-left:-13px;border-radius:50%;background:var(--red);display:grid;place-items:center;font-size:15px;transition:left 1.6s var(--ease)}
+
+/* FECHAMENTO */
+.close{text-align:center;padding:var(--sec) var(--gut) 40px}
+.close .hand{font-size:44px;margin-top:10px}
+.social{display:flex;justify-content:center;gap:22px;margin-top:44px}
+.social a{color:var(--muted);font-size:24px;transition:color .2s}
+.social a:hover{color:var(--text)}
+.credit{margin-top:28px}
+.credit a{text-decoration:underline;text-underline-offset:2px}
+
+/* entrada suave */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.rv.in{opacity:1;transform:none}
+.hand.rv.in{transform:rotate(-2.5deg)}
+
+/* parallax leve no hero, só onde o navegador suporta scroll-driven animation */
+@supports (animation-timeline: scroll()){
+  @media (prefers-reduced-motion: no-preference){
+    .hero .bg{animation:drift linear both;animation-timeline:scroll(root);animation-range:0 760px}
+    @keyframes drift{to{translate:0 90px}}
+  }
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rv{opacity:1;transform:none}.lane::after{transform:scaleX(1)}
+}
+
+/* ENTRADA: estado inicial antes do JS assumir com Web Animations */
+.hero .block{position:relative;z-index:2}
+.lane .mask{display:block;overflow:hidden;padding:.2em 0 .04em;margin-top:-.2em}
+.lane .w{display:block;will-change:transform}
+.intro .bg,.intro .logo{opacity:0}
+.intro .lane .w{transform:translateY(130%)}
+.intro .lane::after{transform:scaleX(0)!important}
+.intro .hand{clip-path:inset(-10% 100% -10% 0)}
+
+/* LOCKUP: bloco sólido, mesmo tamanho e cor; ordem em sobrescrito; manuscrito rabiscado por cima */
+.lane{padding:0;letter-spacing:-.055em;line-height:.86;text-transform:none;color:var(--text)!important;margin:0!important;font-size:clamp(70px,21vw,90px)!important}
+.lane::after{display:none}
+.lane .w{white-space:nowrap}
+.lane sup{font-size:.2em;font-weight:500;letter-spacing:0;vertical-align:top;position:relative;top:.55em;margin-left:.18em;color:var(--muted)}
+.hero .hand{display:block;width:max-content;max-width:100%;margin:-.85em -4px 0 auto;font-size:clamp(22px,6.8vw,28px)!important;white-space:nowrap;transform:rotate(-5deg);transform-origin:right center;position:relative;z-index:3;text-shadow:0 1px 0 rgba(10,9,8,.35)}
+
+/* hero mais compacto; vídeo em altura cheia com fade para o fundo (sem borda) */
+.hero{min-height:0;height:clamp(520px,80svh,640px)}
+.hero .bg{height:100%!important;object-position:50% 18%!important;-webkit-mask-image:linear-gradient(180deg,#000 55%,transparent 98%);mask-image:linear-gradient(180deg,#000 55%,transparent 98%)}
+.lane{font-size:clamp(46px,13.5vw,60px)!important}
+.hero .hand{font-size:clamp(20px,6vw,25px)!important}
+
+/* HERO EM DUAS PARTES: vídeo inteiro no topo (nada por cima), lockup abaixo no preto */
+.hero{height:auto!important;min-height:0!important;display:block;padding:0 0 36px!important;overflow:visible}
+.hero::after{display:none}
+.hero .bg{position:relative!important;inset:auto!important;display:block;width:100%!important;height:auto!important;aspect-ratio:1/1;object-fit:cover;object-position:50% 28%!important;-webkit-mask-image:linear-gradient(180deg,#000 82%,transparent 100%);mask-image:linear-gradient(180deg,#000 82%,transparent 100%)}
+.hero .block{padding:0 var(--gut);margin-top:-22px}
+.sec.ep{padding-top:56px}
+
+/* MLS: card com a cor da marca (azul-noite do logo) */
+.mls{background:linear-gradient(180deg,#0f1a2b 0%,#0b1220 100%);border-radius:var(--r);padding:22px 20px 24px;border:1px solid rgba(255,255,255,.07)}
+.mls-head{display:flex;align-items:center;gap:14px}
+.mls-head img{width:58px;height:58px;border-radius:50%;flex:none;box-shadow:0 0 0 1px rgba(255,255,255,.12)}
+.mls-name{font-weight:600;font-size:16px;letter-spacing:-.01em}
+.mls-head .cap{margin-top:2px;color:#93a0b5}
+.mls-t{margin-top:22px}
+.mls-photo{border-radius:16px;overflow:hidden;margin-top:20px;aspect-ratio:3/4}
+.mls-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 50%}
+.mls-figs{display:grid;grid-template-columns:1.1fr .7fr 1.1fr;gap:12px;margin-top:22px}
+.mls-figs b{display:block;font-size:24px;font-weight:600;letter-spacing:-.04em;line-height:1;white-space:nowrap}
+.mls-figs .cap{display:block;margin-top:6px;color:#93a0b5;font-size:12px;line-height:1.35}
+
+/* crédito PróLink, bem discreto */
+.credit{display:flex;flex-direction:column;align-items:center;gap:8px;margin:40px auto 0;width:max-content;opacity:.32;transition:opacity .3s}
+.credit:hover{opacity:.7}
+.credit img{height:13px;width:auto}
+.credit span{font-size:10.5px;color:var(--muted);letter-spacing:.01em}
+</style>
+</head>
+<body>
+<main class="page">
+
+  <header class="hero intro">
+    <video class="bg" id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="joel-jota/hero-poster-v2.jpg" aria-label="Joel Jota no estúdio, no palco, ao ar livre e com os filhos">
+      <source src="joel-jota/hero-1080.webm" type="video/webm" media="(min-resolution: 2dppx)">
+      <source src="joel-jota/hero-1080.mp4" type="video/mp4" media="(min-resolution: 2dppx)">
+      <source src="joel-jota/hero-720.webm" type="video/webm">
+      <source src="joel-jota/hero-720.mp4" type="video/mp4">
+    </video>
+    <img class="logo" src="joel-jota/logo.webp" alt="Joel Jota">
+    <div class="block" id="block">
+      <h1 aria-label="Saúde, família e trabalho. Não inverta a ordem.">
+        <span class="lane" aria-hidden="true"><span class="mask"><span class="w">Saúde<sup>1</sup></span></span></span>
+        <span class="lane" aria-hidden="true"><span class="mask"><span class="w">Família<sup>2</sup></span></span></span>
+        <span class="lane" aria-hidden="true"><span class="mask"><span class="w">Trabalho<sup>3</sup></span></span></span>
+      </h1>
+      <p class="hand" aria-hidden="true">Não inverta a ordem!</p>
+    </div>
+  </header>
+
+  <!-- Episódio -->
+  <section class="sec ep">
+    <div class="rv">
+      <p class="cap">Jota Jota Podcast, episódio <span data-count="299">299</span></p>
+      <h2 class="h2" style="margin-top:6px">Com Rick Chesther.</h2>
+      <a class="thumb" href="https://www.youtube.com/watch?v=vSbnkhhf6Vo" target="_blank" rel="noopener" aria-label="Assistir ao episódio 299 no YouTube">
+        <img src="joel-jota/ep299.jpg" alt="Como sair do zero e construir uma vida melhor, com Rick Chesther" loading="lazy" width="1280" height="720">
+        <span class="play"><i class="ph-fill ph-play"></i></span>
+      </a>
+      <div class="actions">
+        <a class="pill" href="https://www.youtube.com/watch?v=vSbnkhhf6Vo" target="_blank" rel="noopener">Assistir</a>
+        <a class="more" href="https://open.spotify.com/episode/7ppjZnB0ghUe5IjZVWysAC" target="_blank" rel="noopener">Ouvir no Spotify <i class="ph ph-caret-right"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Palestras -->
+  <section class="sec talk">
+    <div class="rv">
+      <h2 class="h1">Leve o Joel para o seu evento.</h2>
+      <div class="photo"><img class="grade" src="joel-jota/palco.jpg" alt="Joel Jota palestrando para uma plateia" loading="lazy" width="1020" height="697"></div>
+      <div class="figs">
+        <div><b><span data-count="1000">1.000</span>+</b><span class="cap">palestras</span></div>
+        <div><b><span data-count="500">500</span> mil</b><span class="cap">pessoas</span></div>
+        <div><b><span data-count="100">100</span>+</b><span class="cap">cidades</span></div>
+      </div>
+      <div class="actions">
+        <a class="pill" href="https://joeljota.bitrix24.site/palestra_joel_jota/?utm_source=Instagram&utm_medium=JoelJota&utm_campaign=Bio" target="_blank" rel="noopener">Pedir orçamento</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mentoria / LIGA -->
+  <section class="sec">
+    <article class="mls rv">
+      <div class="mls-head">
+        <img src="joel-jota/mls-logo.jpg" alt="Mentoring League Society" width="150" height="150">
+        <div><p class="mls-name">Mentoring League Society</p><p class="cap">Cofundada por Joel Jota, Caio Carneiro e Flávio Augusto</p></div>
+      </div>
+      <h2 class="h2 mls-t">A liga de clubes de empresários que chegou à Nasdaq.</h2>
+      <div class="mls-photo"><img src="joel-jota/liga.jpg" alt="Joel Jota, Flávio Augusto e Caio Carneiro em frente ao painel da Nasdaq na Times Square, que celebra R$ 1 bilhão em vendas da Mentoring League Society" loading="lazy"></div>
+      <div class="mls-figs">
+        <div><b>R$ 1 bi</b><span class="cap">em vendas nos 2 primeiros anos</span></div>
+        <div><b>27</b><span class="cap">clubes de empresários</span></div>
+        <div><b>R$ 1,4 bi</b><span class="cap">projetados para 2026</span></div>
+      </div>
+      <div class="actions">
+        <a class="pill" href="https://joeljota.bitrix24.site/crm_form_u1ym1/?utm_source=Instagram&utm_medium=JoelJota&utm_campaign=Bio" target="_blank" rel="noopener">Aplicar para a mentoria</a>
+        <a class="more" href="https://mls.digital/members-book" target="_blank" rel="noopener">Ver os clubes <i class="ph ph-caret-right"></i></a>
+      </div>
+    </article>
+  </section>
+
+  <!-- Grade final -->
+  <section class="sec">
+    <div class="grid">
+      <a class="tile wide rv" id="hard" href="https://www.instagram.com/75hardjj/" target="_blank" rel="noopener">
+        <div>
+          <p class="cap">Agora</p>
+          <div class="hard-top"><p class="h3">75 Hard JJ</p><p class="h3">Dia <span id="day">19</span><span class="muted">/75</span></p></div>
+          <div class="track" aria-hidden="true"><div class="rope"></div><div class="done" id="done"></div><div class="swim" id="swim"><i class="ph ph-person-simple-swim"></i></div></div>
+        </div>
+        <span class="more">Acompanhar <i class="ph ph-caret-right"></i></span>
+      </a>
+      <a class="tile rv" href="https://joeljota.com/livros-3/" target="_blank" rel="noopener">
+        <i class="ph ph-books ic" aria-hidden="true"></i>
+        <div><p class="big"><span data-count="7">7</span> mi</p><p class="cap">livros vendidos</p><span class="more">Ver livros <i class="ph ph-caret-right"></i></span></div>
+      </a>
+      <a class="tile rv" href="https://open.spotify.com/show/6wqBtC9OMq2mLvhDjZbqVM" target="_blank" rel="noopener">
+        <i class="ph ph-spotify-logo ic" aria-hidden="true"></i>
+        <div><p class="h3">O trabalho devolve</p><p class="cap">Mensagem diária</p><span class="more">Ouvir <i class="ph ph-caret-right"></i></span></div>
+      </a>
+    </div>
+  </section>
+
+  <footer class="close">
+    <p class="h2 rv">O sucesso é treinável.</p>
+    <p class="hand rv">Valendo?</p>
+    <nav class="social" aria-label="Redes sociais">
+      <a href="https://www.instagram.com/joeljota/" target="_blank" rel="noopener" aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>
+      <a href="https://www.youtube.com/@JoelJota" target="_blank" rel="noopener" aria-label="YouTube"><i class="ph ph-youtube-logo"></i></a>
+      <a href="https://open.spotify.com/show/6wqBtC9OMq2mLvhDjZbqVM" target="_blank" rel="noopener" aria-label="Spotify"><i class="ph ph-spotify-logo"></i></a>
+      <a href="https://www.linkedin.com/in/joeljota/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="ph ph-linkedin-logo"></i></a>
+      <a href="https://www.tiktok.com/@joel_jota" target="_blank" rel="noopener" aria-label="TikTok"><i class="ph ph-tiktok-logo"></i></a>
+    </nav>
+    <a class="credit" href="https://www.instagram.com/rafael.takehara/" target="_blank" rel="noopener" aria-label="Redesign não oficial, conceito PróLink por @rafael.takehara">
+      <img src="joel-jota/prolink.png" alt="" width="370" height="90">
+      <span>Redesign não oficial · @rafael.takehara</span>
+    </a>
+  </footer>
+</main>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // vídeo do hero: parado no poster para quem prefere menos movimento
+  const hv = document.getElementById('heroVideo');
+  if (reduce) { hv.removeAttribute('autoplay'); hv.pause(); }
+
+  // 75 Hard JJ: dia 19 em 18/10/2026, logo o dia 1 foi 30/09/2026
+  const start = new Date(2026, 8, 30);
+  const d = Math.min(75, Math.max(1, Math.floor((Date.now() - start) / 864e5) + 1));
+  document.getElementById('day').textContent = d;
+  const k = d / 75;
+
+
+
+  // ENTRADA: cordas desenham, palavras sobem da máscara (1, 2, 3), manuscrito se revela,
+  // foto acende com zoom lento enquanto o bloco desce. Um toque adianta tudo para o fim.
+  const hero = document.querySelector('.hero'), block = document.getElementById('block');
+  const lanes = [...block.querySelectorAll('.lane')];
+  let seen = false;
+  try { seen = sessionStorage.getItem('jj-intro') === '1'; } catch (e) {}
+  if (reduce || seen) {
+    hero.classList.remove('intro');
+    lanes.forEach(l => l.classList.add('in'));
+  } else {
+    const draw = 'cubic-bezier(.65,0,.35,1)', rise = 'cubic-bezier(.22,1,.36,1)';
+    const lift = hero.clientHeight / 2 - (block.offsetTop + block.offsetHeight / 2);
+    const anims = [];
+    const go = (el, kf, o) => anims.push(el.animate(kf, { fill: 'both', ...o }));
+    lanes.forEach((l, i) => {
+      // a corda é um pseudo-elemento: anima via classe com atraso próprio
+      go(l.querySelector('.w'), [{ transform: 'translateY(130%)' }, { transform: 'translateY(0)' }],
+         { duration: 1000, delay: 150 + i * 110, easing: rise });
+    });
+    go(block.querySelector('.hand'), [{ clipPath: 'inset(-10% 100% -10% 0)' }, { clipPath: 'inset(-10% 0% -10% 0)' }],
+       { duration: 650, delay: 1150, easing: 'cubic-bezier(.33,0,.2,1)' });
+    go(block, [{ transform: `translateY(${lift}px)` }, { transform: `translateY(${lift}px)`, offset: .62 }, { transform: 'translateY(0)' }],
+       { duration: 2900, easing: draw });
+    go(hero.querySelector('.bg'), [{ opacity: 0, transform: 'scale(1.12)' }, { opacity: 0, transform: 'scale(1.12)', offset: .45 }, { opacity: 1, transform: 'scale(1)' }],
+       { duration: 3600, easing: 'cubic-bezier(.25,.1,.25,1)' });
+    go(hero.querySelector('.logo'), [{ opacity: 0 }, { opacity: 0, offset: .7 }, { opacity: 1 }], { duration: 2900 });
+    hero.classList.remove('intro');
+    hero.classList.add('drawing');
+    requestAnimationFrame(() => lanes.forEach(l => l.classList.add('in')));
+    document.body.style.overflow = 'hidden';
+    const done = () => {
+      document.body.style.overflow = '';
+      hero.classList.remove('drawing');
+      try { sessionStorage.setItem('jj-intro', '1'); } catch (e) {}
+    };
+    Promise.all(anims.map(a => a.finished)).then(done, done);
+    hero.addEventListener('pointerdown', () => anims.forEach(a => a.finish()), { once: true });
+  }
+
+  const fmt = n => n.toLocaleString('pt-BR');
+  const count = el => {
+    const end = +el.dataset.count;
+    if (reduce) { el.textContent = fmt(end); return; }
+    const t0 = performance.now(), dur = 1200;
+    const step = t => {
+      const p = Math.min(1, (t - t0) / dur);
+      el.textContent = fmt(Math.round(end * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+
+  // cada bloco entra ao aparecer; números contam; o nadador avança até o dia atual
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (!en.isIntersecting) return;
+      const el = en.target;
+      el.classList.add('in');
+      el.querySelectorAll('[data-count]').forEach(count);
+      if (el.id === 'hard') {
+        document.getElementById('done').style.transform = `scaleX(${k})`;
+        document.getElementById('swim').style.left = `${k * 100}%`;
+      }
+      io.unobserve(el);
+    });
+  }, { threshold: .2 });
+  document.querySelectorAll('.rv').forEach(el => io.observe(el));
+})();
+</script>
+</body>
+</html>
