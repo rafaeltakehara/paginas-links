@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Roleta dos Experts</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;700;800;900&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+  /* Layout: a roleta de game show na identidade PróLink, preto e branco, logo no alto, uma faixa branca invertida marca o sorteado */
+  :root {
+    --black: #000000;
+    --stage: #070707;
+    --reel: #101010;
+    --line: #2a2a2a;
+    --white: #ffffff;
+    --dim: #6f6f6f;
+    --blue: #1f5bff; /* azul do botão PróLink: provisório até confirmar o hex oficial */
+    --font-brand: "Inter Tight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+    --row: clamp(64px, 11vw, 112px);
+    color-scheme: dark;
+  }
+  [hidden] { display: none !important; }
+  html, body { height: 100%; }
+  body {
+    background: radial-gradient(90% 70% at 50% 45%, #161616 0%, var(--black) 70%), var(--black);
+    color: var(--white);
+    font-family: var(--font-brand);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(20px, 3.2vw, 36px);
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 24px;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  header { display: flex; flex-direction: column; align-items: center; gap: clamp(10px, 1.6vw, 16px); }
+  .headline { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  h1 {
+    margin: 0;
+    font-family: var(--font-brand);
+    font-weight: 900;
+    font-size: clamp(18px, 3.2vw, 38px);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    text-align: center;
+    text-wrap: balance;
+    color: var(--white);
+  }
+  .tag {
+    font-family: var(--font-brand);
+    font-weight: 800;
+    font-size: clamp(12px, 1.5vw, 16px);
+    letter-spacing: .04em;
+    color: var(--black);
+    background: var(--white);
+    padding: 5px 9px 4px;
+    border-radius: 3px;
+  }
+
+  .machine {
+    position: relative;
+    width: min(100%, 880px);
+    padding: 14px;
+    border-radius: 10px;
+    background: var(--stage);
+    box-shadow: 0 0 0 2px var(--white), 0 24px 70px rgba(0, 0, 0, .8);
+    box-sizing: border-box;
+  }
+  .bulbs { position: absolute; left: 22px; right: 22px; height: 14px; display: flex; justify-content: space-between; align-items: center; pointer-events: none; }
+  .bulbs.top { top: 0; }
+  .bulbs.bottom { bottom: 0; }
+  .bulbs i {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--white);
+    box-shadow: 0 0 6px rgba(255, 255, 255, .8);
+    opacity: .85;
+  }
+  .machine.spinning .bulbs i { animation: chase .5s steps(2) infinite; }
+  .machine.spinning .bulbs i:nth-child(even) { animation-delay: -.25s; }
+  .machine.won .bulbs i { animation: flash .18s steps(2) 8; }
+  @keyframes chase { 50% { opacity: .1; } }
+  @keyframes flash { 50% { opacity: 0; } }
+
+  .window {
+    position: relative;
+    height: calc(var(--row) * 3);
+    overflow: hidden;
+    border-radius: 4px;
+    background: linear-gradient(180deg, var(--black) 0%, var(--reel) 30%, var(--reel) 70%, var(--black) 100%);
+    box-shadow: inset 0 0 0 1px var(--line), inset 0 14px 30px rgba(0, 0, 0, .9), inset 0 -14px 30px rgba(0, 0, 0, .9);
+  }
+  .band {
+    position: absolute; left: 0; right: 0; top: var(--row); height: var(--row);
+    background: var(--white);
+    transition: background .15s;
+  }
+  .machine.spinning .band { background: #1c1c1c; box-shadow: inset 0 0 0 1px #3a3a3a; }
+  .machine.won .band { animation: bandglow .9s ease-out; }
+  @keyframes bandglow { 0% { box-shadow: 0 0 60px rgba(255, 255, 255, .9); } 100% { box-shadow: 0 0 0 rgba(255, 255, 255, 0); } }
+  .pointer {
+    position: absolute; right: -2px; top: calc(var(--row) * 1.5 + 14px); transform: translateY(-50%);
+    width: 0; height: 0;
+    border-top: 13px solid transparent; border-bottom: 13px solid transparent; border-right: 18px solid var(--white);
+  }
+  .name {
+    position: absolute; left: 0; right: 0; height: var(--row);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-brand);
+    font-weight: 800;
+    font-size: clamp(28px, 5.6vw, 62px);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    white-space: nowrap;
+    color: var(--dim);
+    will-change: transform;
+    padding-inline: 40px;
+    box-sizing: border-box;
+  }
+  .name.center { color: var(--black); font-weight: 900; }
+  .machine.won .name.center { animation: pop .5s cubic-bezier(.2, 1.6, .4, 1); }
+  @keyframes pop { 0% { transform: var(--t) scale(.9); } 60% { transform: var(--t) scale(1.06); } 100% { transform: var(--t) scale(1); } }
+
+  .controls { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  #spin {
+    font-family: var(--font-brand);
+    font-weight: 900;
+    font-size: clamp(16px, 2vw, 22px);
+    letter-spacing: .02em;
+    color: var(--white);
+    padding: 13px 40px 12px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--blue);
+    box-shadow: 0 0 0 0 rgba(31, 91, 255, .4);
+    cursor: pointer;
+    transition: transform .08s, box-shadow .2s;
+  }
+  #spin:hover { box-shadow: 0 0 0 6px rgba(31, 91, 255, .25); }
+  #spin:active { transform: scale(.97); }
+  #spin:disabled { opacity: .35; cursor: default; box-shadow: none; }
+  #spin:focus-visible, .link:focus-visible, .panel button:focus-visible { outline: 2px solid var(--white); outline-offset: 4px; }
+  .help { margin: 0; font-family: var(--font-mono); font-size: 12px; color: var(--dim); text-align: center; }
+  .help kbd { font-family: var(--font-mono); font-weight: 600; color: #a8a8a8; }
+  .link { background: none; border: 0; color: var(--dim); font: inherit; font-size: 12px; text-decoration: underline; cursor: pointer; padding: 2px; }
+
+  .panel {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: min(380px, 100%);
+    background: #0b0b0b;
+    border-left: 1px solid var(--line);
+    padding: calc(20px + env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px)) calc(20px + env(safe-area-inset-bottom, 0px)) 20px;
+    box-sizing: border-box;
+    display: flex; flex-direction: column; gap: 14px;
+    box-shadow: -20px 0 60px rgba(0, 0, 0, .7);
+    z-index: 20;
+  }
+  .panel h2 { margin: 0; font-family: var(--font-brand); font-weight: 900; font-size: 18px; letter-spacing: -0.01em; color: var(--white); }
+  .panel label { font-size: 12px; font-weight: 500; color: #9a9a9a; display: flex; flex-direction: column; gap: 6px; }
+  .panel textarea, .panel select {
+    font-family: var(--font-mono); font-size: 14px; color: var(--white);
+    background: #151515; border: 1px solid var(--line); border-radius: 6px; padding: 10px;
+  }
+  .panel textarea { flex: 1; min-height: 200px; resize: none; line-height: 1.5; }
+  .panel label.grow { flex: 1; }
+  .panel .row { display: flex; gap: 10px; }
+  .panel button {
+    flex: 1; font-family: var(--font-brand); font-weight: 800; font-size: 14px;
+    padding: 11px; border-radius: 999px; cursor: pointer; border: 0;
+  }
+  .panel .save { background: var(--white); color: var(--black); }
+  .panel .close { background: #1d1d1d; color: var(--white); }
+  .panel .note { margin: 0; font-size: 11px; color: #8a8a8a; line-height: 1.5; font-family: var(--font-mono); }
+
+  @media (max-width: 520px) {
+    .name { padding-inline: 24px; }
+    .help .desk { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="headline">
+    <h1 id="title">TIRANDO EXPERTS DO LINKTREE</h1>
+    <span class="tag" id="tag">DIA 2</span>
+  </div>
+</header>
+
+
+<div class="machine" id="machine">
+  <div class="bulbs top" aria-hidden="true"></div>
+  <div class="window" id="window" aria-live="polite">
+    <div class="band" aria-hidden="true"></div>
+  </div>
+  <div class="pointer" aria-hidden="true"></div>
+  <div class="bulbs bottom" aria-hidden="true"></div>
+</div>
+
+<div class="controls">
+  <button id="spin" type="button">Girar</button>
+  <p class="help"><kbd>espaço</kbd> gira<span class="desk"> · <kbd>F</kbd> tela cheia · <kbd>M</kbd> som</span> · <button class="link" id="open-panel" type="button">editar nomes (E)</button></p>
+</div>
+
+<aside class="panel" id="panel" hidden aria-label="Editar roleta">
+  <h2>Editar roleta</h2>
+  <label>Título
+    <textarea id="title-input" rows="1" style="min-height:0;flex:none"></textarea>
+  </label>
+  <label>Selo
+    <textarea id="tag-input" rows="1" style="min-height:0;flex:none"></textarea>
+  </label>
+  <label class="grow">Nomes, um por linha
+    <textarea id="names-input" spellcheck="false"></textarea>
+  </label>
+  <label>Resultado
+    <select id="rig-input"></select>
+  </label>
+  <p class="note">Com um nome escolhido em Resultado, a roleta sempre para nele. Nada na tela mostra isso.</p>
+  <div class="row">
+    <button class="close" id="close-panel" type="button">Fechar</button>
+    <button class="save" id="save-panel" type="button">Salvar</button>
+  </div>
+</aside>
+
+<script>
+(() => {
+  const DEFAULT_NAMES = [
+    "Virginia Fonseca", "Whindersson Nunes", "Joel Jota", "Carlinhos Maia",
+    "Primo Rico", "Gustavo Cerbasi", "Leandro Twin", "Caio Carneiro",
+    "Nathalia Arcuri", "Paulo Muzy", "Renato Cariani", "Flávio Augusto",
+    "Camila Vieira", "Tiago Brunet", "Gracyanne Barbosa", "Wendell Carvalho"
+  ];
+  const KEY = "roleta-experts-v2";
+  const store = {
+    load() { try { return JSON.parse(localStorage.getItem(KEY) || "null"); } catch { return null; } },
+    save(v) { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch {} }
+  };
+  const saved = store.load() || {};
+  let state = {
+    title: saved.title || "TIRANDO EXPERTS DO LINKTREE",
+    tag: saved.tag ?? "DIA 2",
+    names: Array.isArray(saved.names) && saved.names.length ? saved.names : DEFAULT_NAMES.slice(),
+    rig: saved.rig ?? "Joel Jota"
+  };
+
+  const $ = id => document.getElementById(id);
+  const machine = $("machine"), win = $("window"), spinBtn = $("spin");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // bulbs
+  for (const b of document.querySelectorAll(".bulbs")) {
+    for (let i = 0; i < 22; i++) b.appendChild(document.createElement("i"));
+  }
+
+  // rows: 5 reused elements, centre is k = 0
+  const rows = [];
+  for (let k = -2; k <= 2; k++) {
+    const el = document.createElement("div");
+    el.className = "name";
+    win.appendChild(el);
+    rows.push({ k, el });
+  }
+
+  let p = Math.floor(Math.random() * state.names.length); // float position, integer = a name centred
+  let spinning = false;
+  const N = () => state.names.length;
+  const at = i => state.names[((i % N()) + N()) % N()];
+
+  function rowH() { return win.clientHeight / 3; }
+
+  function render(speed = 0) {
+    const h = rowH();
+    const base = Math.floor(p), frac = p - base;
+    const smear = reduce ? 0 : Math.min(speed * 0.9, 46);
+    const blur = reduce ? 0 : Math.min(speed * 0.045, 2.6);
+    const shadow = smear > 1
+      ? [0.25, 0.5, 0.75, 1].map(f => `0 ${(-smear * f).toFixed(1)}px 0 rgba(255,255,255,${(0.5 - f * 0.4).toFixed(2)}), 0 ${(smear * f).toFixed(1)}px 0 rgba(255,255,255,${(0.5 - f * 0.4).toFixed(2)})`).join(",")
+      : "none";
+    for (const r of rows) {
+      const y = (r.k - frac + 1) * h; // row 1 = centre slot
+      const t = `translateY(${y.toFixed(2)}px)`;
+      r.el.style.transform = t;
+      r.el.style.setProperty("--t", t);
+      r.el.textContent = at(base + r.k + (frac > 0.5 ? 0 : 0));
+      r.el.style.textShadow = shadow;
+      r.el.style.filter = blur > 0.2 ? `blur(${blur.toFixed(2)}px)` : "none";
+      r.el.classList.toggle("center", !spinning && r.k === 0 && frac === 0);
+    }
+  }
+
+  // --- sound ---
+  let ctx = null, muted = false;
+  function audio() {
+    if (!ctx) { try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch { ctx = null; } }
+    if (ctx && ctx.state === "suspended") ctx.resume();
+    return ctx;
+  }
+  function tick(speed) {
+    const a = audio(); if (!a || muted) return;
+    const t = a.currentTime;
+    const o = a.createOscillator(), g = a.createGain();
+    o.type = "square";
+    o.frequency.setValueAtTime(1500 + Math.min(speed, 60) * 12, t);
+    o.frequency.exponentialRampToValueAtTime(600, t + 0.03);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.16, t + 0.002);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.045);
+    o.connect(g).connect(a.destination);
+    o.start(t); o.stop(t + 0.05);
+  }
+  function fanfare() {
+    const a = audio(); if (!a || muted) return;
+    const t0 = a.currentTime + 0.02;
+    const notes = [523.25, 659.25, 783.99, 1046.5];
+    notes.forEach((f, i) => note(a, f, t0 + i * 0.09, 0.16, "square", 0.09));
+    [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach(f => note(a, f, t0 + 0.38, 0.9, "triangle", 0.07));
+    // shimmer
+    for (let i = 0; i < 10; i++) note(a, 2093 + Math.random() * 1500, t0 + 0.4 + i * 0.05, 0.12, "sine", 0.03);
+  }
+  function note(a, f, t, d, type, vol) {
+    const o = a.createOscillator(), g = a.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, t);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    o.connect(g).connect(a.destination);
+    o.start(t); o.stop(t + d + 0.02);
+  }
+
+  // --- spin ---
+  const ease = x => 1 - Math.pow(1 - x, 4.2);
+  function spin() {
+    if (spinning || N() < 2) return;
+    audio();
+    spinning = true;
+    spinBtn.disabled = true;
+    machine.classList.remove("won");
+    machine.classList.add("spinning");
+
+    const start = Math.round(p);
+    let target = state.names.indexOf(state.rig);
+    if (target < 0) target = Math.floor(Math.random() * N());
+    const cur = ((start % N()) + N()) % N();
+    const loops = reduce ? 1 : 5 + Math.floor(Math.random() * 2);
+    const minRows = Math.max(loops * N(), 40);
+    const offset = ((target - cur) % N() + N()) % N();
+    const dist = Math.ceil((minRows - offset) / N()) * N() + offset;
+    const end = start + dist;
+    const dur = reduce ? 1200 : 5200 + Math.random() * 900;
+    const t0 = performance.now();
+    let lastIdx = Math.round(start), lastTick = 0, lastP = start, lastT = t0;
+
+    function frame(now) {
+      const x = Math.min((now - t0) / dur, 1);
+      p = start + dist * ease(x);
+      const dt = Math.max(now - lastT, 1) / 1000;
+      const speed = Math.abs(p - lastP) / dt; // rows per second
+      lastP = p; lastT = now;
+      const idx = Math.round(p);
+      if (idx !== lastIdx) {
+        lastIdx = idx;
+        if (now - lastTick > 32) { tick(speed); lastTick = now; }
+      }
+      if (x < 1) { render(speed); requestAnimationFrame(frame); }
+      else {
+        p = end;
+        spinning = false;
+        render(0);
+        machine.classList.remove("spinning");
+        void machine.offsetWidth;
+        machine.classList.add("won");
+        fanfare();
+        spinBtn.disabled = false;
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  // --- panel ---
+  const panel = $("panel");
+  function fillPanel() {
+    $("title-input").value = state.title;
+    $("tag-input").value = state.tag;
+    $("names-input").value = state.names.join("\n");
+    fillRig(state.names);
+  }
+  function fillRig(names) {
+    const sel = $("rig-input");
+    sel.innerHTML = "";
+    const o = document.createElement("option"); o.value = ""; o.textContent = "Aleatório"; sel.appendChild(o);
+    for (const n of names) { const op = document.createElement("option"); op.value = n; op.textContent = n; sel.appendChild(op); }
+    sel.value = names.includes(state.rig) ? state.rig : "";
+  }
+  $("names-input").addEventListener("input", e => {
+    const keep = $("rig-input").value;
+    fillRig(parse(e.target.value));
+    if ([...$("rig-input").options].some(o => o.value === keep)) $("rig-input").value = keep;
+  });
+  const parse = s => s.split("\n").map(x => x.trim()).filter(Boolean);
+  function openPanel() { if (spinning) return; fillPanel(); panel.hidden = false; $("names-input").focus(); }
+  function closePanel() { panel.hidden = true; spinBtn.focus(); }
+  function savePanel() {
+    const names = parse($("names-input").value);
+    if (names.length >= 2) state.names = names;
+    state.title = $("title-input").value.trim() || state.title;
+    state.tag = $("tag-input").value.trim();
+    state.rig = $("rig-input").value;
+    store.save(state);
+    applyText();
+    p = Math.round(p) % N();
+    render(0);
+    closePanel();
+  }
+  function applyText() {
+    $("title").textContent = state.title;
+    $("tag").textContent = state.tag;
+    $("tag").hidden = !state.tag;
+  }
+  $("open-panel").addEventListener("click", openPanel);
+  $("close-panel").addEventListener("click", closePanel);
+  $("save-panel").addEventListener("click", savePanel);
+
+  spinBtn.addEventListener("click", spin);
+  document.addEventListener("keydown", e => {
+    if (!panel.hidden) { if (e.key === "Escape") closePanel(); return; }
+    const k = e.key.toLowerCase();
+    if (e.key === " " || e.key === "Enter") { if (document.activeElement !== spinBtn || e.key === " ") { e.preventDefault(); spin(); } }
+    else if (k === "e") openPanel();
+    else if (k === "m") muted = !muted;
+    else if (k === "f") {
+      try {
+        if (document.fullscreenElement) document.exitFullscreen();
+        else document.documentElement.requestFullscreen?.().catch(() => {});
+      } catch {}
+    }
+  });
+  window.addEventListener("resize", () => render(0));
+
+  applyText();
+  document.fonts?.ready.then(() => render(0));
+  render(0);
+})();
+</script>
+
+</body>
+</html>
